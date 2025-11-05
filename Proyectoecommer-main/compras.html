@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <main class="container my-5">
+    <h2 class="text-center mb-4">🧾 Resumen de tu compra</h2>
+
+    <div id="lista-carrito"></div>
+    <p class="text-end mt-3"><strong>Total:</strong> $<span id="total">0</span></p>
+
+    <div class="text-end">
+      <button id="btn-comprar" class="btn btn-primary">Finalizar compra</button>
+      <a href="productos.html" class="btn btn-secondary">Seguir comprando</a>
+    </div>
+  </main>
+
+  <script>
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const lista = document.getElementById("lista-carrito");
+    const totalElemento = document.getElementById("total");
+
+    if (carrito.length === 0) {
+      lista.innerHTML = "<p>Tu carrito está vacío.</p>";
+    } else {
+      lista.innerHTML = carrito
+        .map(p => `
+          <div class="border-bottom py-2 d-flex justify-content-between">
+            <span>${p.nombre}</span>
+            <span>$${p.precio.toLocaleString()}</span>
+          </div>
+        `)
+        .join("");
+
+      const total = carrito.reduce((acc, p) => acc + p.precio, 0);
+      totalElemento.textContent = total.toLocaleString();
+    }
+
+    document.getElementById("btn-comprar").addEventListener("click", () => {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío 😅");
+        return;
+      }
+      alert("✅ ¡Compra realizada con éxito! Gracias por tu pedido 🧡");
+      localStorage.removeItem("carrito");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
